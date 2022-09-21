@@ -1,13 +1,15 @@
-import React from 'react';
-import MasterLayout from '../components/MasterLayout/MasterLayout';
+import React, { lazy, Suspense } from 'react';
+import LazyLoader from '../components/MasterLayout/LazyLoader';
 
+const  Login =lazy(() => import('../components/Login/Login'))
 const LoginPage = () => {
     return (
         <div>
-            <MasterLayout>
-            <h1 className='text-danger'>This is Login</h1>
-           
-            </MasterLayout>
+            
+            <Suspense fallback={<LazyLoader/>}>
+                <Login></Login>
+                </Suspense>
+            
         </div>
     );
 };

@@ -5,8 +5,8 @@ import {AiOutlineCheckCircle, AiOutlineEdit, AiOutlineAppstore, AiOutlineLogout,
 
 import {BsHourglass, BsListNested} from "react-icons/bs";
 import logo from "../../assets/img/logo.svg";
-import {getUserDetails, removeSessions} from "../../helper/SessionHelper";
-
+import { removeSessions} from "../../helper/SessionHelper";
+import shohans from '../../assets/img/shohan.jpeg'
 
 
 
@@ -47,10 +47,10 @@ const MasterLayout = (props) => {
 
                     <div className="float-right h-auto d-flex">
                         <div className="user-dropdown">
-                            <img className="icon-nav-img icon-nav"  alt=""/>
+                            <img className="icon-nav-img icon-nav" src={shohans}  alt="img"/>
                             <div className="user-dropdown-content ">
                                 <div className="mt-4 text-center">
-                                    <img className="icon-nav-img"  alt=""/>
+                                    <img className="icon-nav-img" src={shohans}  alt="img"/>
                                     <h6></h6>
                                     <hr className="user-dropdown-divider  p-0"/>
                                 </div>
