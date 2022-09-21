@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from "react-router-dom";
+
 import './index.css';
 import './assets/css/animate.min.css';
 import './assets/css/style.css';
@@ -8,13 +8,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
+import {Provider} from 'react-redux';
+import store from './redux/store/Store'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+   
+      <Provider store={store}>
       <App />
-    </BrowserRouter>
+      </Provider>
+
   </React.StrictMode>
 );
 

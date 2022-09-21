@@ -1,7 +1,31 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { LoginRequest } from '../../APIRequest/APIRequest';
+import { ErrorToast, IsEmail, IsEmpty } from '../../helper/FormHelper';
 
 const Login = () => {
+    let passRef,emailRef=useRef();
+
+    const SubmitLogin=()=>{
+        let email=emailRef.value;
+        let pass=passRef.value;
+        if(IsEmail(email)){
+            ErrorToast("Invalid Email Address")
+        }
+        else if(IsEmpty(pass)){
+            ErrorToast("Password Required")
+        }
+        else{
+            LoginRequest(email,pass).then((result)=>{
+                if(result===true){
+                    window.location.href="/"
+                }
+            })
+
+    
+        }
+    }
+
     return (
         <Fragment>
             <div className="container">
@@ -11,11 +35,11 @@ const Login = () => {
                             <div className="card-body">
                                 <h4 className='text-center'>SIGN IN</h4>
                                 <br/>
-                                <input  placeholder="User Email" className="form-control animated fadeInUp" type="email"/>
+                                <input ref={(input)=>emailRef=input}  placeholder="User Email" className="form-control animated fadeInUp" type="email"/>
                                 <br/>
-                                <input  placeholder="User Password" className="form-control animated fadeInUp" type="password"/>
+                                <input ref={(input)=>passRef=input}  placeholder="User Password" className="form-control animated fadeInUp" type="password"/>
                                 <br/>
-                                <button  className="btn w-100 animated fadeInUp float-end" style={{"background-color": "#CB0C9F","color": "#ffffff"}}>Login</button>
+                                <button onClick={SubmitLogin} className="btn w-100 animated fadeInUp float-end" style={{"background-color": "#CB0C9F","color": "#ffffff"}}>Login</button>
                                 <hr/>
                                 <div className=" mt-5 text-center">
 
