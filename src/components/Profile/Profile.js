@@ -1,7 +1,63 @@
-import React from 'react';
-import shohan from '../../assets/img/shohan.jpeg'
+import React, { useEffect, useRef } from 'react';
+import { getUserDetails } from '../../helper/SessionHelper';
+import {GetProfileDetails, ProfileUpdateRequest} from "../../APIRequest/APIRequest";
+import { useSelector } from 'react-redux';
+import { ErrorToast, getBase64, IsEmail, IsEmpty, IsMobile } from '../../helper/FormHelper';
+import { useNavigate } from 'react-router-dom';
+
 
 const Profile = () => {
+    let emailRef,firstNameRef,lastNameRef,mobileRef,passwordRef,userImgRef,userImgView=useRef();
+
+
+    useEffect(()=>{
+        GetProfileDetails()
+    },[])
+
+    const ProfileData = useSelector((state) => state.profile.value);
+
+    let navigate=useNavigate();
+
+    const PreviewImage = () => {
+        let ImgFile = userImgRef.files[0];
+        getBase64(ImgFile).then((base64Img)=>{
+            userImgView.src=base64Img;
+        })
+    }
+
+
+    const UpdateMyProfile = () => {
+        let email=emailRef.value;
+        let fastName=firstNameRef.value;
+        let lastName=lastNameRef.value;
+        let mobile=mobileRef.value;
+        let password= passwordRef.value;
+        let photo=userImgView.src
+
+        if(IsEmail(email)){
+            ErrorToast("Valid Email Address Required !")
+        }
+        else if(IsEmpty(fastName)){
+            ErrorToast("First Name Required !")
+        }
+        else if(IsEmpty(lastName)){
+            ErrorToast("Last Name Required !")
+        }
+        else if(!IsMobile(mobile)){
+            ErrorToast("Valid Mobile  Required !")
+        }
+        else if(IsEmpty(password)){
+            ErrorToast("Password Required !")
+        }
+        else{
+            ProfileUpdateRequest(email,fastName,lastName,mobile,password,photo).then((result)=>{
+                if(result===true){
+                    navigate("/")
+                }
+            })
+        }
+    }
+
     return (
         <div className="container">
             <div className="row d-flex justify-content-center">
@@ -9,35 +65,37 @@ const Profile = () => {
                     <div className="card">
                         <div className="card-body">
                             <div className="container-fluid">
-                                <img src={shohan}  className="icon-nav-img-lg"  alt="img"/>
+                                <div className='text-center'>
+                                <img ref={(input)=>userImgView=input} src={getUserDetails()['photo']}  className="icon-nav-img-md"  style={{'width':'60px','height': '60px', 'border-radius': '100%'}} alt="img"/>
+                                </div>
                                 <hr/>
                                 <div className="row">
-                                    <div className="p-1">
+                                    <div className="p-2">
                                         <label>Profile Picture</label>
-                                        <input  placeholder="User Email" className="form-control animated fadeInUp" type="file"/>
+                                        <input  onChange={PreviewImage}  ref={(input)=>userImgRef=input} placeholder="User Email" className="form-control animated fadeInUp" type="file"/>
                                     </div>
-                                    <div className="p-1">
-                                        <label>Email Address</label>
-                                        <input  placeholder="User Email" className="form-control animated fadeInUp" type="email"/>
+                                    <div className="p-2">
+                                        
+                                        <input key={Date.now()} defaultValue={ProfileData['email']}  readOnly={true}  ref={(input)=>emailRef=input}  placeholder="User Email" className="form-control animated fadeInUp" type="email"/>
                                     </div>
-                                    <div className="p-1">
-                                        <label>First Name</label>
-                                        <input  placeholder="First Name" className="form-control animated fadeInUp" type="text"/>
+                                    <div className="p-2">
+                                        
+                                        <input key={Date.now()} defaultValue={ProfileData['firstName']} ref={(input)=>firstNameRef=input}  placeholder="First Name" className="form-control animated fadeInUp" type="text"/>
                                     </div>
-                                    <div className="p-1">
-                                        <label>Last Name</label>
-                                        <input  placeholder="Last Name" className="form-control animated fadeInUp" type="text"/>
+                                    <div className="p-2">
+                                       
+                                        <input key={Date.now()} defaultValue={ProfileData['lastName']}  ref={(input)=>lastNameRef=input}  placeholder="Last Name" className="form-control animated fadeInUp" type="text"/>
                                     </div>
-                                    <div className="p-1">
-                                        <label>Mobile</label>
-                                        <input placeholder='Mobile'  className="form-control animated fadeInUp" type="mobile"/>
+                                    <div className="p-2">
+                                        
+                                        <input key={Date.now()} defaultValue={ProfileData['mobile']} ref={(input)=>mobileRef=input} placeholder='Mobile'  className="form-control animated fadeInUp" type="mobile"/>
                                     </div>
-                                    <div className="p-1">
-                                        <label>Password</label>
-                                        <input  placeholder="User Password" className="form-control animated fadeInUp" type="password"/>
+                                    <div className="p-2">
+                                        
+                                        <input key={Date.now()} defaultValue={ProfileData['password']}  ref={(input)=>passwordRef=input}  placeholder="User Password" className="form-control animated fadeInUp" type="password"/>
                                     </div>
-                                    <div className="p-1">
-                                        <button  className="btn w-100 float-end animated fadeInUp" style={{"background-color": "#CB0C9F","color": "#ffffff"}}>Update Profile</button>
+                                    <div className="p-2">
+                                        <button onClick={UpdateMyProfile} className="btn w-100 float-end animated fadeInUp" style={{"background-color": "#CB0C9F","color": "#ffffff"}}>Update Profile</button>
                                     </div>
                                 </div>
                             </div>

@@ -10,6 +10,7 @@ import ProgressPage from './pages/ProgressPage';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import ForgetpassPage from './pages/ForgetpassPage';
+
 import FullScreenLoader from './components/MasterLayout/FullScreenLoader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -46,11 +47,13 @@ function App() {
       <Fragment>
         <BrowserRouter>
         <Routes>
-          <Route path='/' element={<DashboardPage></DashboardPage>}></Route> 
-          <Route path='*' element={<Page404></Page404>}></Route>
+        <Route path='/' element={<DashboardPage></DashboardPage>}></Route>
           <Route path='/Login' element={<LoginPage></LoginPage>}></Route>
           <Route path='/registration' element={<RegistrationPage></RegistrationPage>}></Route>
           <Route path='/Forgetpass' element={<ForgetpassPage></ForgetpassPage>}></Route>
+          <Route path='*' element={<Page404></Page404>}></Route>
+          
+
         </Routes>
         </BrowserRouter>
         <FullScreenLoader></FullScreenLoader>

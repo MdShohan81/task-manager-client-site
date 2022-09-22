@@ -1,8 +1,36 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { AiOutlineCalendar, AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
+import { useSelector } from 'react-redux';
+import { TaskListByStatus } from '../../APIRequest/APIRequest';
+import { DeleteToDO } from '../../helper/DeleteAlert';
+import { UpdateToDO } from '../../helper/UpdateAlert';
 
 const Completed = () => {
+
+    useEffect(()=>{
+        TaskListByStatus("Completed");
+    },[])
+
+    const CompletedList = useSelector((state) => state.task.Completed)
+
+    const DeleteItem=(id)=>{
+        DeleteToDO(id).then((result)=>{
+            if(result===true){
+                TaskListByStatus("Completed");
+            }
+        })
+    }
+
+    const StatusChangeItem=(id,status)=>{
+        UpdateToDO(id, status).then((result)=>{
+            if(result===true){
+                TaskListByStatus("Completed");
+            }
+        })
+    }
+
+
     return (
         <Fragment>
             <Container fluid={true} className="content-body">
@@ -23,20 +51,22 @@ const Completed = () => {
                 </div>
                 <div className="row p-0 m-0">
                    
-                            <div className="col-12 col-lg-4 col-sm-6 col-md-4  p-2">
-                                <div className="card h-100">
+                {
+                                CompletedList.map((item, i) => <div key={i.toString()}  className="col-12 col-lg-4 col-sm-6 col-md-4  p-2">
+                                <div  className="card h-100">
                                     <div className="card-body">
-                                        <h6 className="animated fadeInUp">item title</h6>
-                                        <p className="animated fadeInUp">item description</p>
+                                        <h6 className="animated fadeInUp">{item.title}</h6>
+                                        <p className="animated fadeInUp">{item.description}</p>
                                         <p className="m-0 animated fadeInUp p-0">
-                                            <AiOutlineCalendar/> item date
-                                            <a  className="icon-nav text-primary mx-1"><AiOutlineEdit /></a>
-                                            <a className="icon-nav text-danger mx-1"><AiOutlineDelete /></a>
-                                            <a className="badge float-end bg-success">item name</a>
+                                            <AiOutlineCalendar/> {item.createdDate}
+                                            <a onClick={StatusChangeItem.bind(this,item._id,item.status)} href className="icon-nav text-primary mx-1"><AiOutlineEdit /></a>
+                                            <a onClick={DeleteItem.bind(this,item._id)} href className="icon-nav text-danger mx-1"><AiOutlineDelete /></a>
+                                            <a className="badge float-end bg-success text-decoration-none" href>{item.status}</a>
                                         </p>
                                     </div>
                                 </div>
-                            </div>
+                                </div>
+                                )}
                       
                 </div>
             </Container>
